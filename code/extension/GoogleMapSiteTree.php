@@ -9,7 +9,8 @@
  * @author morven [at] i-lateral.com
  *
  **/
-class GoogleMapSiteTree extends DataExtension {
+class GoogleMapSiteTree extends DataExtension
+{
 
     private static $db = array(
         'ShowMap'   => 'Boolean',
@@ -20,8 +21,9 @@ class GoogleMapSiteTree extends DataExtension {
         'Maps' => "GoogleMap"
     );
     
-    public function updateCMSFields(FieldList $fields) {
-        if($this->owner->ShowMap) {
+    public function updateCMSFields(FieldList $fields)
+    {
+        if ($this->owner->ShowMap) {
             $maps_field = new GridField(
                 'Maps',
                 '',
@@ -30,16 +32,16 @@ class GoogleMapSiteTree extends DataExtension {
             );
             
             // Tidy up category config and remove default add button
-		    $field_config = $maps_field->getConfig();
-		    $field_config
+            $field_config = $maps_field->getConfig();
+            $field_config
                 ->removeComponentsByType('GridFieldAddNewButton')
                 ->addComponent(new GridFieldSortableRows('Sort'));
 
             // Add creation button if member has create permissions
-            if($this->owner->canCreate()) {
-		        $add_button = new GridFieldAddNewButton('toolbar-header-left');
-		        $add_button->setButtonName('Add Google Map');
-		        
+            if ($this->owner->canCreate()) {
+                $add_button = new GridFieldAddNewButton('toolbar-header-left');
+                $add_button->setButtonName('Add Google Map');
+                
                 $field_config->addComponent($add_button);
             }
             
@@ -49,7 +51,8 @@ class GoogleMapSiteTree extends DataExtension {
         return $fields;
     }
     
-    public function updateSettingsFields(FieldList $fields) {
+    public function updateSettingsFields(FieldList $fields)
+    {
         $maps_group = FieldGroup::create(
             CheckboxField::create("ShowMap", "Enable maps on this page?"),
             CheckboxField::create("StaticMap", "Render maps as images?")

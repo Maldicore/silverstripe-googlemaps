@@ -5,7 +5,8 @@
  * page.
  *
  */
-class GoogleMap extends DataObject {
+class GoogleMap extends DataObject
+{
     private $api_key;
 
     private static $db = array(
@@ -44,7 +45,8 @@ class GoogleMap extends DataObject {
         'ZoomLevel' => 10
     );
     
-    public function getCMSFields() {    
+    public function getCMSFields()
+    {
         $fields = parent::getCMSFields();
         
         $fields->removeByname('ParentID');
@@ -56,7 +58,7 @@ class GoogleMap extends DataObject {
         $fields->removeByname('ZoomLevel');
         $fields->removeByname('Content');
         
-        if($this->ID) {
+        if ($this->ID) {
             $fields->addFieldToTab(
                 "Root.Main",
                 HtmlEditorField::create(
@@ -86,26 +88,30 @@ class GoogleMap extends DataObject {
         return $fields;
     }
     
-    private function url_safe_address() {
+    private function url_safe_address()
+    {
         $address  = str_replace('/n', ',', $this->Address);
         $address .= ',' . $this->PostCode;
         
         return urlencode($address);
-    } 
+    }
     
     /**
      * Get the location for this map, either address / postcode or lat / long
      *
      * @return String
      */
-    public function getLocation() {
+    public function getLocation()
+    {
         $location = false;
 
-        if($this->Address && $this->PostCode)
+        if ($this->Address && $this->PostCode) {
             $location = $this->url_safe_address();
+        }
         
-        if($this->Latitude && $this->Longitude)
+        if ($this->Latitude && $this->Longitude) {
             $location = $this->Latitude . ',' . $this->Longitude;
+        }
         
         return $location;
     }
@@ -115,7 +121,8 @@ class GoogleMap extends DataObject {
      *
      * @return String
      */
-    public function getFullAddress() {
+    public function getFullAddress()
+    {
         return Convert::raw2xml($this->Address . '/n' . $this->PostCode);
     }
     
@@ -124,11 +131,12 @@ class GoogleMap extends DataObject {
      *
      * @return String
      */
-    public function Link() {
+    public function Link()
+    {
         $link = false;
         $location = $this->getLocation();
         
-        if($location) {
+        if ($location) {
             $link  = 'http://maps.google.com/maps?q=';
             $link .= $location;
             $link .= '&amp;z='.$this->ZoomLevel;
@@ -142,11 +150,12 @@ class GoogleMap extends DataObject {
      *
      * @return String
      */
-    public function ImgURL($width = 256, $height = 256) {
+    public function ImgURL($width = 256, $height = 256)
+    {
         $link = false;
         $location = $this->getLocation();
         
-        if($location) {
+        if ($location) {
             $link = 'http://maps.googleapis.com/maps/api/staticmap?';
             $link .= 'center=' . $location;
             $link .= '&zoom=' . $this->ZoomLevel;
@@ -159,19 +168,23 @@ class GoogleMap extends DataObject {
         return $link;
     }
     
-    public function canCreate($member = null) {
+    public function canCreate($member = null)
+    {
         return $this->Parent()->canCreate();
     }
     
-    public function canView($member = null) {
+    public function canView($member = null)
+    {
         return $this->Parent()->canView();
     }
     
-    public function canEdit($member = null) {
+    public function canEdit($member = null)
+    {
         return $this->Parent()->canEdit();
     }
     
-    public function canDelete($member = null) {
+    public function canDelete($member = null)
+    {
         return $this->Parent()->canDelete();
     }
 }
